@@ -1,23 +1,28 @@
-// import './App.css';
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PostUserData from "./crudoperation/PostUserData";
-import GetUserData from "./crudoperation/GetUserData";
-import UpdateUserData from "./crudoperation/UpdateUserData";
+import axios from "axios";
+import "./App.css";
+import React, { Suspense, lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import NavigationBar from "./component/NavigationBar"; // Make sure NavigationBar is correctly imported
+
+const Home = lazy(() => import('./component/Home'));
+const About = lazy(() => import('./component/About'));
+const Contact = lazy(() => import(/* webpackPrefetch:true */'./component/Contact'));
+// This is the magic comment which download the file or component when app is load at first
+// We can see this inside the network tab the contact file will load automatically at first render
 
 function App() {
   return (
-    <div>
-      {/* <h1>Jai Banjrang Bali</h1> */}
-      <BrowserRouter>
+    <>
+    <NavigationBar />  
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path="/" element={<PostUserData />} />
-          <Route path="/getuserdata" element={<GetUserData />} />
-          <Route path="/updateuserdata/:id" element={<UpdateUserData />} />
+          <Route path="/" element={<Home />}  />
+          <Route path="/about" element={<About />}  />
+          <Route path="/contact" element={<Contact />}  />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </Suspense>
+
+    </>
   );
 }
-
 export default App;
